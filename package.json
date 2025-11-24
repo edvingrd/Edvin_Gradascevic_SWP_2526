@@ -1,0 +1,24 @@
+{
+    "name": "opentdb-prisma",
+    "version": "1.0.0",
+    "description": "Fetch trivia questions from OpenTDB and store them in a Prisma SQLite database",
+    "main": "dist/index.js",
+    "scripts": {
+        "start": "ts-node src/index.ts",
+        "seed": "ts-node src/seed.ts",
+        "prisma:generate": "prisma generate",
+        "db:push": "prisma db push"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@prisma/client": "^6.19.0",
+        "@types/node": "^24.10.0",
+        "axios": "^1.13.2",
+        "he": "^1.2.0",
+        "prisma": "^6.19.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
+    }
+}

@@ -1,0 +1,47 @@
+import axios from 'axios';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function main() {
+    const amount = 50; 
+    const url = `https://opentdb.com/api.php?amount=${amount}`;
+    const res = await axios.get(url);
+
+    if (!res.data || res.data.response_code !== 0) {
+        console.error('OpenTDB returned an error or no data', res.data);
+        return;
+    }
+
+    const questions = res.data.results;
+
+    let added = 0;
+    for (const q of questions) {
+        const exists = await prisma.question.findFirst({ where: { question: q.question } });
+        if (exists) continue;
+
+        await prisma.question.create({
+            data: {
+                question: q.question,
+                category: q.category,
+                type: q.type,
+                difficulty: q.difficulty,
+                correct_answer: q.correct_answer,
+                incorrect_answers: q.incorrect_answers
+            }
+        });
+        added++;
+    }
+
+    const total = await prisma.question.count();
+    console.log(`Added ${added} new questions. Total in DB: ${total}`);
+}
+
+main()
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });

@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Question {
+  id                Int      @id @default(autoincrement())
+  question          String
+  category          String
+  type              String
+  difficulty        String
+  correct_answer    String
+  incorrect_answers Json
+  createdAt         DateTime @default(now())
+}
