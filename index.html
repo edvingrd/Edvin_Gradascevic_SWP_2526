@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragen aus Datenbank</title>
+</head>
+<body>
+    <div id="questions-container"></div>
+
+    <script>
+    async function loadQuestions() {
+        try {
+            const response = await fetch('http://localhost:3000/api/questions');
+            const data = await response.json();
+
+            if (data.length > 0) {
+                console.log("Erste Frage:", data[0].question);
+            }
+
+            displayQuestions(data);
+        } catch (error) {
+            console.error('Fehler beim Laden:', error);
+        }
+    }
+
+    function displayQuestions(questions) {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = ""; // vorher leeren
+        questions.forEach(q => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <h3>${q.question}</h3>
+                <p><strong>Antwort:</strong> ${q.correct_answer}</p>
+                <hr>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    loadQuestions();
+    </script>
+</body>
+</html>
